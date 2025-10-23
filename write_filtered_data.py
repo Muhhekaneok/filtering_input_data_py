@@ -42,16 +42,16 @@ def write_results(args: argparse.Namespace,
             print(f"Error. Could not write to {file_path}: {e}")
 
 
-args = argparse.Namespace(
-    output_path="C:/Users/darkwizard/Desktop/",
-    prefix="sample-",
-    append=False,
-    short_stats=False,
-    full_stats=True,
-    input_files=["input1.txt", "input2.txt"]
-)
-
-print(write_results(args,
-                    [11, 2, 567],
-                    [3.14, 2.5, 9.99, 1.0],
-                    ["hello", "world"]))
+# args = argparse.Namespace(
+#     output_path="C:/Users/darkwizard/Desktop/",
+#     prefix="sample-",
+#     append=False,
+#     short_stats=False,
+#     full_stats=True,
+#     input_files=["input1.txt", "input2.txt"]
+# )
+#
+# print(write_results(args,
+#                     [11, 2, 567],
+#                     [3.14, 2.5, 9.99, 1.0],
+#                     ["hello", "world"]))

@@ -1,4 +1,6 @@
 import argparse
+from read_data import read_and_filter_files
+from write_filtered_data import write_results
 
 
 def parse_arguments():
@@ -34,10 +36,19 @@ def parse_arguments():
 if __name__ == "__main__":
     args = parse_arguments()
 
-    print("--- Result of parsing ---")
-    print(f"Path for output (-o): {args.output_path}")
-    print(f"Prefix (-p): {args.prefix}")
-    print(f"Append (-a): {args.append}")
-    print(f"Short stats (-s): {args.short_stats}")
-    print(f"Full stats (-f): {args.full_stats}")
-    print(f"Input files (+): {args.input_files}")
+    # print("--- Result of parsing ---")
+    # print(f"Path for output (-o): {args.output_path}")
+    # print(f"Prefix (-p): {args.prefix}")
+    # print(f"Append (-a): {args.append}")
+    # print(f"Short stats (-s): {args.short_stats}")
+    # print(f"Full stats (-f): {args.full_stats}")
+    # print(f"Input files (+): {args.input_files}")
+
+    integers_data, floats_data, strings_data = read_and_filter_files(
+        file_paths=args.input_files
+    )
+
+    if not any([integers_data, floats_data, strings_data]):
+        print("Input files are empty or do not contain suitable data. No registration required.")
+    else:
+        write_results(args, integers_data, floats_data, strings_data)

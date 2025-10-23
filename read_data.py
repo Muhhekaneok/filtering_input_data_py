@@ -26,4 +26,4 @@ def read_and_filter_files(file_paths: list[str]) -> tuple[list[int], list[float]
     return integers, floats, strings
 
 
-print(read_and_filter_files(["input1.txt", "input2.txt"]))
+# print(read_and_filter_files(["input1.txt", "input2.txt"]))
