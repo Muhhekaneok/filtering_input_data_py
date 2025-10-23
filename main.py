@@ -1,6 +1,7 @@
 import argparse
 from read_data import read_and_filter_files
 from write_filtered_data import write_results
+from stats import print_statistics
 
 
 def parse_arguments():
@@ -48,7 +49,8 @@ if __name__ == "__main__":
         file_paths=args.input_files
     )
 
-    if not any([integers_data, floats_data, strings_data]):
-        print("Input files are empty or do not contain suitable data. No registration required.")
-    else:
+    if any([integers_data, floats_data, strings_data]):
         write_results(args, integers_data, floats_data, strings_data)
+        print_statistics(args, integers_data, floats_data, strings_data)
+    else:
+        print("Input files are empty or do not contain suitable data. No registration required.")
