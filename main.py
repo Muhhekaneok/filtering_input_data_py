@@ -1,4 +1,6 @@
+import sys
 import argparse
+import logging
 from read_data import read_and_filter_files
 from write_filtered_data import write_results
 from stats import print_statistics
@@ -37,20 +39,18 @@ def parse_arguments():
 if __name__ == "__main__":
     args = parse_arguments()
 
-    # print("--- Result of parsing ---")
-    # print(f"Path for output (-o): {args.output_path}")
-    # print(f"Prefix (-p): {args.prefix}")
-    # print(f"Append (-a): {args.append}")
-    # print(f"Short stats (-s): {args.short_stats}")
-    # print(f"Full stats (-f): {args.full_stats}")
-    # print(f"Input files (+): {args.input_files}")
+    try:
+        integers_data, floats_data, strings_data = read_and_filter_files(
+            file_paths=args.input_files)
 
-    integers_data, floats_data, strings_data = read_and_filter_files(
-        file_paths=args.input_files
-    )
+        if not any([integers_data, floats_data, strings_data]):
+            logging.warning("No input files found or files contain invalid data")
+            sys.exit(1)
 
-    if any([integers_data, floats_data, strings_data]):
         write_results(args, integers_data, floats_data, strings_data)
-        print_statistics(args, integers_data, floats_data, strings_data)
-    else:
-        print("Input files are empty or do not contain suitable data. No registration required.")
+        logging.info("All input files have been processed")
+        sys.exit(0)
+
+    except Exception as e:
+        logging.error(f"Unexpected error {e}")
+        sys.exit(1)

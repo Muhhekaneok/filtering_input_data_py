@@ -1,5 +1,6 @@
 import argparse
 import os
+import logging
 
 
 def write_results(args: argparse.Namespace,
@@ -8,39 +9,28 @@ def write_results(args: argparse.Namespace,
                   strings: list[str]) -> None:
     mode = "a" if args.append else "w"
 
-    if args.output_path:
-        os.makedirs(args.output_path, exist_ok=True)
+    dir_path = args.output_path or "."
+    os.makedirs(dir_path, exist_ok=True)
 
-    if integers:
-        file_path = os.path.join(args.output_path, f"{args.prefix}integers.txt")
+    def safe_write(filename: str, data: list, datatype: str) -> None:
+        file_path = os.path.join(dir_path, f"{args.prefix}{filename}")
+        if not data:
+            return
         try:
             with open(file_path, mode, encoding="utf-8") as f:
-                for item in integers:
+                for item in data:
                     f.write(str(item) + "\n")
-                print(f"Integers successfully written to {file_path}")
+            logging.info(f"{datatype.capitalize()} successfully written to {file_path}")
+        except PermissionError as e:
+            logging.error(f"No permission to write file {file_path}: {e}")
         except IOError as e:
-            print(f"Error. Could not write to {file_path}: {e}")
+            logging.error(f"I/O error while writing file {file_path}: {e}")
+        except Exception as e:
+            logging.error(f"Unexpected error while writing file {file_path}: {e}")
 
-    if floats:
-        file_path = os.path.join(args.output_path, f"{args.prefix}floats.txt")
-        try:
-            with open(file_path, mode, encoding="utf-8") as f:
-                for item in floats:
-                    f.write(str(item) + "\n")
-                print(f"Floats successfully written to {file_path}")
-        except IOError as e:
-            print(f"Error. Could not write to {file_path}: {e}")
-
-    if strings:
-        file_path = os.path.join(args.output_path, f"{args.prefix}strings.txt")
-        try:
-            with open(file_path, mode, encoding="utf-8") as f:
-                for item in strings:
-                    f.write(item + "\n")
-                print(f"Strings successfully written to {file_path}")
-        except IOError as e:
-            print(f"Error. Could not write to {file_path}: {e}")
-
+    safe_write("integers.txt", integers, "integers")
+    safe_write("floats.txt", floats, "floats")
+    safe_write("strings.txt", strings, "strings")
 
 # args = argparse.Namespace(
 #     output_path="C:/Users/darkwizard/Desktop/",
